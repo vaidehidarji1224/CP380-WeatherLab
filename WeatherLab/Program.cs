@@ -26,32 +26,49 @@ namespace WeatherLab
             // Cooling degree days have a mean temp of >=18C
             //
 
-            var degree = measurements.GroupBy(y => y.year).Select(d => new
+            var degree = measurements.GroupBy(r => r.year).Select(d => new
             {
                 year = d.Key,
-                hdd = d.Where(val => val.meantemp < 18).Count(),
-                // Console.WriteLine("Year\tHDD\tCDD");
-                cdd = d.Where(val => val.meantemp >= 18).Count()
+               
             });
 
-            //
-            // Most Variable days are the days with the biggest temperature
-            // range. That is, the largest difference between the maximum and
-            // minimum temperature
-            //
-            // Oh: and number formatting to zero pad.
-            // 
-            // For example, if you want:
-            //      var x = 2;
+            var degree1 = measurements.GroupBy(r => r.year >2015).Select(d => new
+            {
+               
+                hdd = d.Where(val => val.meantemp < 18).Count(),
+               
+            });
+
+            // Console.WriteLine("Year\tHDD\tCDD");
+            var degree2 = measurements.GroupBy(r => r.year > 2015).Select(d => new
+            {
+
+                cdd = d.Where(val => val.meantemp >= 18).Count()
+            });
+           
+          
+            Console.WriteLine("Year\tHDD\tCDD");
+
+
+            // if(degree = j )
+           //year
+           foreach (var j in degree)
+            {
+                Console.WriteLine($"{ j.year }");
+            }
+           //hdd
+            foreach (var j in degree1)
+            {
+                Console.WriteLine($"{ j.hdd }");
+            }
+            //cdd
+            foreach (var j in degree2)
+            {
+                Console.WriteLine($"{ j.cdd }");
+            }
             // To display as "0002" then:
             //      $"{x:d4}"
             //
-            Console.WriteLine("Year\tHDD\tCDD");
-
-            foreach (var i in degree)
-            {
-                Console.WriteLine($"{ i.year }\t{ i.hdd }\t{ i.cdd }");
-            }
 
             Console.WriteLine("\nTop 5 Most Variable Days");
             Console.WriteLine("YYYY-MM-DD\tDelta");
@@ -76,8 +93,20 @@ namespace WeatherLab
                 {
                     break;
                 }
-                    
+                //
+                // Most Variable days are the days with the biggest temperature
+                // range. That is, the largest difference between the maximum and
+                // minimum temperature
+                //
+                // Oh: and number formatting to zero pad.
+                // 
+                // For example, if you want:
+                //      var x = 2;
+                // To display as "0002" then:
+                //      $"{x:d4}"
+                //        
+            }
         }
-        }
+
     }
 }
