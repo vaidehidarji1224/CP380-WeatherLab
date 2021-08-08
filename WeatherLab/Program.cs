@@ -35,7 +35,7 @@ namespace WeatherLab
             var degree1 = measurements.GroupBy(r => r.year >2015).Select(d => new
             {
                
-                hdd = d.Where(val => val.meantemp < 18).Count(),
+                hdd = d.Where(val => val.meantemp < 18).Count(), 
                
             });
 
@@ -59,7 +59,8 @@ namespace WeatherLab
            //hdd
             foreach (var j in degree1)
             {
-                Console.WriteLine($"{ j.hdd }");
+               Console.WriteLine($"{ j.hdd }");
+              
             }
             //cdd
             foreach (var j in degree2)
@@ -77,16 +78,16 @@ namespace WeatherLab
             var vdays = measurements  .Select(v => new
                     {
                         date = $"{v.year}-{v.month:d2}-{v.day:d2}",
-                        delta = (v.maxtemp - v.mintemp)
+                        data= (v.maxtemp - v.mintemp)
                     })
-                    .OrderByDescending(r => r.delta);
+                    .OrderByDescending(r => r.data);
 
             int count = 0;
             foreach (var i in vdays)
             {
                 if (count < 5)
                 {
-                    Console.WriteLine($"{i.date}\t{i.delta}");
+                    Console.WriteLine($"{i.date}\t{i.data}");
                     count++;
                 }
                 else
