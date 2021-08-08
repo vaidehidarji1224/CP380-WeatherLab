@@ -12,7 +12,7 @@ namespace WeatherLab
         {
             var measurements = new WeatherSqliteContext(dbfile).Weather;
 
-            var total_2020_precipitation =measurements .Where(val => val.year == 2020) .Select(s => s.precipitation) .Sum();
+            var total_2020_precipitation = measurements.Where(val => val.year == 2020).Select(s => s.precipitation).Sum();
             Console.WriteLine($"Total precipitation in 2020: {total_2020_precipitation} mm\n");
 
             //
@@ -26,7 +26,13 @@ namespace WeatherLab
             // Cooling degree days have a mean temp of >=18C
             //
 
-            // ?? TODO ??
+            var degree = measurements.GroupBy(y => y.year).Select(d => new
+            {
+                year = d.Key,
+                hdd = d.Where(val => val.meantemp < 18).Count(),
+                // Console.WriteLine("Year\tHDD\tCDD");
+                cdd = d.Where(val => val.meantemp >= 18).Count()
+            });
 
             //
             // Most Variable days are the days with the biggest temperature
@@ -42,12 +48,36 @@ namespace WeatherLab
             //
             Console.WriteLine("Year\tHDD\tCDD");
 
-            // ?? TODO ??
+            foreach (var i in degree)
+            {
+                Console.WriteLine($"{ i.year }\t{ i.hdd }\t{ i.cdd }");
+            }
 
             Console.WriteLine("\nTop 5 Most Variable Days");
             Console.WriteLine("YYYY-MM-DD\tDelta");
 
-            // ?? TODO ??
+            //TODO
+            var vdays = measurements  .Select(v => new
+                    {
+                        date = $"{v.year}-{v.month:d2}-{v.day:d2}",
+                        delta = (v.maxtemp - v.mintemp)
+                    })
+                    .OrderByDescending(r => r.delta);
+
+            int count = 0;
+            foreach (var i in vdays)
+            {
+                if (count < 5)
+                {
+                    Console.WriteLine($"{i.date}\t{i.delta}");
+                    count++;
+                }
+                else
+                {
+                    break;
+                }
+                    
+        }
         }
     }
 }
